@@ -4,32 +4,42 @@ import { removeItem, updateQuantity } from './CartSlice';
 import './CartItem.css';
 
 const CartItem = ({ onContinueShopping }) => {
-  const cart = useSelector(state => state.cart.items);
+  const cart = useSelector(state => state.cart.items || []);
   const dispatch = useDispatch();
 
-  // Calculate total amount for all products in the cart
+  const parseCost = (cost) => parseFloat(cost.replace('$', '')) || 0;
+
   const calculateTotalAmount = () => {
- 
+    return cart.reduce((total, item) => {
+      const cost = parseCost(item.cost);
+      const quantity = item.quantity || 0;
+      return total + (quantity * cost);
+    }, 0);
   };
 
   const handleContinueShopping = (e) => {
-   
+    e.preventDefault();
+    if (onContinueShopping) {
+      onContinueShopping(e);
+    }
   };
 
-
-
   const handleIncrement = (item) => {
+    dispatch(updateQuantity({...item, amount: 1}));
   };
 
   const handleDecrement = (item) => {
-   
+    dispatch(updateQuantity({...item, amount: -1}));
   };
 
   const handleRemove = (item) => {
+    dispatch(removeItem(item));
   };
 
-  // Calculate total cost based on quantity for an item
   const calculateTotalCost = (item) => {
+    const cost = parseCost(item.cost);
+    const quantity = item.quantity || 0;
+    return cost * quantity;
   };
 
   return (
@@ -44,7 +54,7 @@ const CartItem = ({ onContinueShopping }) => {
               <div className="cart-item-cost">{item.cost}</div>
               <div className="cart-item-quantity">
                 <button className="cart-item-button cart-item-button-dec" onClick={() => handleDecrement(item)}>-</button>
-                <span className="cart-item-quantity-value">{item.quantity}</span>
+                <span className="cart-item-quantity-value">{item.quantity || 0}</span>
                 <button className="cart-item-button cart-item-button-inc" onClick={() => handleIncrement(item)}>+</button>
               </div>
               <div className="cart-item-total">Total: ${calculateTotalCost(item)}</div>
@@ -64,5 +74,4 @@ const CartItem = ({ onContinueShopping }) => {
 };
 
 export default CartItem;
-
 
