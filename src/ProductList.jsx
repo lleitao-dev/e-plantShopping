@@ -96,7 +96,7 @@ function ProductList() {
             category: "Insect Repellent Plants",
             plants: [
                 {
-                    name: "oregano",
+                    name: "Oregano",
                     image: "https://cdn.pixabay.com/photo/2015/05/30/21/20/oregano-790702_1280.jpg",
                     description: "The oregano plants contains compounds that can deter certain insects.",
                     cost: "$10"
@@ -234,7 +234,15 @@ function ProductList() {
         width: '1100px',
     };
 
-    const styleA = {
+    const styleA1 = {
+        color: 'white',
+        fontSize: '30px',
+        textDecoration: 'none',
+        textAlign: 'center',
+        marginLeft: '140px',
+    };
+    
+    const styleA2 = {
         color: 'white',
         fontSize: '30px',
         textDecoration: 'none',
@@ -261,6 +269,8 @@ function ProductList() {
         e.preventDefault();
         dispatch(addItem({...item, quantity: 1}));
     };
+    
+    const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
 
     return (
         <div>
@@ -278,10 +288,10 @@ function ProductList() {
                 </div>
                 <div style={styleObjUl}>
                     <div>
-                        <a href="#" onClick={handlePlantsClick} style={styleA}>Plants</a>
+                        <a href="#" onClick={handlePlantsClick} style={styleA1}>Plants</a>
                     </div>
                     <div>
-                        <a href="#" onClick={handleCartClick} style={styleA}>
+                        <a href="#" onClick={handleCartClick} style={styleA2}>
                             <h1 className='cart'>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" id="IconChangeColor" height="68" width="68">
                                     <rect width="156" height="156" fill="none"></rect>
@@ -291,7 +301,11 @@ function ProductList() {
                                 </svg>
                             </h1>
                         </a>
+                        <div className="counting-tab">
+                            {totalItems}
+                        </div>
                     </div>
+                    
                 </div>
             </div>
             {!showCart ? (
